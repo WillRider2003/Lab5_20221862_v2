@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<h1>Gestión de Clientes</h1>
+<a href="/clientes/nuevo">Nuevo Cliente</a>
+<table border="1">
+    <thead>
+    <tr><th>ID</th><th>Nombre</th><th>Tipo Doc.</th><th>Número Doc.</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.documentType}"></td>
+        <td th:text="${c.document}"></td>
+        <td>
+            <a th:href="@{/clientes/editar/{id}(id=${c.id})}">Editar</a>
+            <a th:href="@{/clientes/eliminar/{id}(id=${c.id})}" onclick="return confirm('¿Eliminar?')">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
