@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Comprobante</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<h1>Emitir Comprobante</h1>
+<form action="#" th:action="@{/comprobantes/guardar}" th:object="${invoiceForm}" method="post">
+    <label>Tipo:</label>
+    <select th:field="*{type}">
+        <option value="">Seleccione</option>
+        <option value="BOLETA">Boleta</option>
+        <option value="FACTURA">Factura</option>
+    </select>
+    <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" style="color:red"></span>
+    <br/>
+
+    <label>Fecha:</label>
+    <input type="date" th:field="*{date}" />
+    <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" style="color:red"></span>
+    <br/>
+
+    <label>Cliente:</label>
+    <select th:field="*{customerId}">
+        <option value="">Seleccione</option>
+        <option th:each="c : ${clientes}" th:value="${c.id}" th:text="${c.name} + ' (' + c.documentType + ': ' + c.document + ')'"></option>
+    </select>
+    <span th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}" style="color:red"></span>
+    <br/>
+
+    <h3>Productos</h3>
+    <table border="1">
+        <thead>
+        <tr><th>Producto</th><th>Precio</th><th>Stock disponible</th><th>Cantidad</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${productos}">
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.price}"></td>
+            <td th:text="${p.stock}"></td>
+            <td>
+                <input type="number" min="0" th:field="*{quantities[__${p.id}__]}" style="width:80px;" />
+                <span th:if="${#fields.hasErrors('quantities[' + p.id + ']')}" th:errors="*{quantities[__${p.id}__]}" style="color:red; font-size:0.8em;"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:if="${#fields.hasErrors('quantities')}" th:errors="*{quantities}" style="color:red"></span>
+
+    <br/>
+    <button type="submit">Guardar Comprobante</button>
+    <a href="/comprobantes">Cancelar</a>
+</form>
+</body>
+</html>
